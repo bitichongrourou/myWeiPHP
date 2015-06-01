@@ -1,0 +1,6 @@
+[ 2015-05-31T14:57:38+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/FormsValue/get_forms_data
+ERR: Think\Controller:_server方法不存在！
+
+[ 2015-05-31T14:57:55+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/FormsValue/get_forms_data
+ERR: Think\Controller:_server方法不存在！
+

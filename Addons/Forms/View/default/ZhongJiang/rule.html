@@ -1,0 +1,972 @@
+<extend name="Base/common" />
+<block name="body">
+    <div class="span9 page_message">
+        <section id="contents">
+            <!--自动加载插件标题栏-->
+            <include file="Addons/_nav" />
+
+            <h3 style="margin-top: 50px;margin-left: 30px">已存规则</h3>
+            <select style="margin-top: 50px;margin-left: 30px">
+                <option></option>
+            </select>
+
+
+
+
+
+<form method="post">
+
+
+            <div>
+                <h3 style="margin-top: 50px;margin-left: 30px">规则标题</h3>
+                <input type="text" name="title" style="margin-top: 30px;margin-left: 30px">
+                <!--<textarea style="margin-top: 30px;margin-left: 30px"></textarea>-->
+            </div>
+            <h3 style="margin-top: 50px;margin-left: 30px">规则类型<a>(默认抽奖券)</a></h3>
+            <table style="margin-top: 30px;margin-left: 30px">
+                <tr>
+                    <td>
+                        <!--<input type="radio" class="regular-radio" name="rule_radio" value="全部派券" >-->
+                        <!--<label id="rule_button_all" name="rule_radio" value="全部派券">全部派券</label>-->
+                        <div class="check-item">
+                            <input type="radio" name="rule_radio" id="rule_button_all" checked class="regular-radio" value="全部派券" >
+                            <label for="rule_button_all"></label>全部派券
+                        </div>
+
+                    </td>
+                    <td>
+                    <!--<input type="radio" class="regular-radio" name="rule_radio" value="全部派券">-->
+                    <!--<label id="rule_button_pai" name="rule_radio" value="全部派券">排名派券</label>-->
+                        <div class="check-item">
+                            <input type="radio" name="rule_radio" id="rule_button_pai" checked class="regular-radio" value="排名派券" >
+                            <label for="rule_button_pai"></label>排名派券
+                        </div>
+
+                </td>
+                    <td>
+                        <!--<input type="radio" class="regular-radio" name="rule_radio" value="全部派券"  style="background-color: #000088">-->
+                        <!--<label id="rule_button_chou" name="rule_radio" value="全部派券">抽奖派券</label>-->
+                        <div class="check-item">
+                            <input type="radio" name="rule_radio" id="rule_button_chou" checked class="regular-radio" value="抽奖派券" >
+                            <label for="rule_button_chou"></label>抽奖派券
+                        </div>
+
+                    </td>
+                </tr>
+            </table>
+            <!--全部派券-->
+            <div id="paiquan_all"  >
+                <h4 style="margin-top: 50px;margin-left: 30px">奖品名称</h4>
+                <!--优惠券API接口-->
+                <select id="quan_all" class="quan">
+
+                </select>
+                <h4 style="margin-top: 50px;margin-left: 30px">奖品图片</h4>
+
+                <case>
+                    <div style="margin-top: 50px;margin-left: 30px" class="controls">
+                        <input type="file" id="upload_picture_num3{$field.name}">
+                        <input type="hidden" name="{$field.name}" id="cover_id_{$field.name}" value="{$data[$field['name']]}"/>
+                        <div class="upload-img-box">
+                            <notempty name="data[$field['name']]">
+                                <div class="upload-pre-item"><img src="__ROOT__{$data[$field['name']]|get_cover='path'}"/></div>
+                            </notempty>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        //上传图片
+                        /* 初始化上传插件 */
+                        $("#upload_picture_num3{$field.name}").uploadify({
+                            "height"          : "120",
+                            "swf"             : "__STATIC__/uploadify/uploadify.swf",
+                            "fileObjName"     : "download",
+                            "buttonText"      : "上传图片",
+                            "uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",
+                            "width"           : 120,
+                            'removeTimeout'	  : 1,
+                            'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+                            "onUploadSuccess" : uploadPicture{$field.name}
+                        });
+                        function uploadPicture{$field.name}(file, data){
+                            var data = $.parseJSON(data);
+                            var src = '';
+                            if(data.status){
+                                $("#cover_id_{$field.name}").val(data.id);
+                                src = data.url || '__ROOT__' + data.path;
+                                $("#cover_id_{$field.name}").parent().find('.upload-img-box').html(
+                                        '<div class="upload-pre-item"><img src="' + src + '"/></div>'
+                                );
+                            } else {
+                                updateAlert(data.info);
+                                setTimeout(function(){
+                                    $('#top-alert').find('button').click();
+                                    $(that).removeClass('disabled').prop('disabled',false);
+                                },1500);
+                            }
+                        }
+                    </script>
+                </case>
+                <script>
+
+
+                        $("#paiquan_all").hide();
+
+                </script>
+
+
+
+            </div>
+            <!--排名派券-->
+            <div  id="paiquan_pai">
+                <table style="margin-top: 50px;margin-left: 30px" id="table_pai">
+                    <tr>
+                        <td></td>
+                        <td>奖品名称</td>
+                        <td>起始名次</td>
+                        <td>结束名次</td>
+
+                        <td>奖品图片</td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" class="radio_pai btn" value="X">
+                        </td>
+                        <td>
+                            <select id="quan_pai1" class="quan">
+
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="from" >
+                        </td>
+                        <td>
+                            <input type="text" name="end" >
+                        </td>
+
+                        <td>
+                            <case>
+                                <div class="controls">
+                                    <input type="file" class="upload_picture{$field.name}">
+                                    <input type="hidden" name="{$field.name}" id="cover_id_{$field.name}" value="{$data[$field['name']]}"/>
+                                    <div class="upload-img-box">
+                                        <notempty name="data[$field['name']]">
+                                            <div class="upload-pre-item"><img src="__ROOT__{$data[$field['name']]|get_cover='path'}"/></div>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <!--<script type="text/javascript">-->
+                                    <!--//上传图片-->
+                                    <!--/* 初始化上传插件 */-->
+                                    <!--$("#upload_picture_num4{$field.name}").uploadify({-->
+                                        <!--"height"          : "50",-->
+                                        <!--"swf"             : "__STATIC__/uploadify/uploadify.swf",-->
+                                        <!--"fileObjName"     : "download",-->
+                                        <!--"buttonText"      : "上传图片",-->
+                                        <!--"uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",-->
+                                        <!--"width"           : 70,-->
+                                        <!--'removeTimeout'	  : 1,-->
+                                        <!--'fileTypeExts'	  : '*.jpg; *.png; *.gif;',-->
+                                        <!--"onUploadSuccess" : uploadPicture{$field.name}-->
+                                    <!--});-->
+                                    <!--function uploadPicture{$field.name}(file, data){-->
+                                        <!--var data = $.parseJSON(data);-->
+                                        <!--var src = '';-->
+                                        <!--if(data.status){-->
+                                            <!--$("#cover_id_{$field.name}").val(data.id);-->
+                                            <!--src = data.url || '__ROOT__' + data.path;-->
+                                            <!--$("#cover_id_{$field.name}").parent().find('.upload-img-box').html(-->
+                                                    <!--'<div class="upload-pre-item"><img src="' + src + '"/></div>'-->
+                                            <!--);-->
+                                        <!--} else {-->
+                                            <!--updateAlert(data.info);-->
+                                            <!--setTimeout(function(){-->
+                                                <!--$('#top-alert').find('button').click();-->
+                                                <!--$(that).removeClass('disabled').prop('disabled',false);-->
+                                            <!--},1500);-->
+                                        <!--}-->
+                                    <!--}-->
+                                <!--</script>-->
+                            </case>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" class="radio_pai btn" value="X">
+                        </td>
+                        <td>
+                            <select id="quan_pai2" class="quan">
+
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="from" >
+                        </td>
+                        <td>
+                            <input type="text" name="end" >
+                        </td>
+
+                        <td>
+                            <case>
+                                <div class="controls">
+                                    <input type="file" class="upload_picture{$field.name}">
+                                    <input type="hidden" name="{$field.name}" id="cover_id_{$field.name}" value="{$data[$field['name']]}"/>
+                                    <div class="upload-img-box">
+                                        <notempty name="data[$field['name']]">
+                                            <div class="upload-pre-item"><img src="__ROOT__{$data[$field['name']]|get_cover='path'}"/></div>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <!--<script type="text/javascript">-->
+                                    <!--//上传图片-->
+                                    <!--/* 初始化上传插件 */-->
+                                    <!--$("#upload_picture_num6{$field.name}").uploadify({-->
+                                        <!--"height"          : "50",-->
+                                        <!--"swf"             : "__STATIC__/uploadify/uploadify.swf",-->
+                                        <!--"fileObjName"     : "download",-->
+                                        <!--"buttonText"      : "上传图片",-->
+                                        <!--"uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",-->
+                                        <!--"width"           : 70,-->
+                                        <!--'removeTimeout'	  : 1,-->
+                                        <!--'fileTypeExts'	  : '*.jpg; *.png; *.gif;',-->
+                                        <!--"onUploadSuccess" : uploadPicture{$field.name}-->
+                                    <!--});-->
+                                    <!--function uploadPicture{$field.name}(file, data){-->
+                                        <!--var data = $.parseJSON(data);-->
+                                        <!--var src = '';-->
+                                        <!--if(data.status){-->
+                                            <!--$("#cover_id_{$field.name}").val(data.id);-->
+                                            <!--src = data.url || '__ROOT__' + data.path;-->
+                                            <!--$("#cover_id_{$field.name}").parent().find('.upload-img-box').html(-->
+                                                    <!--'<div class="upload-pre-item"><img src="' + src + '"/></div>'-->
+                                            <!--);-->
+                                        <!--} else {-->
+                                            <!--updateAlert(data.info);-->
+                                            <!--setTimeout(function(){-->
+                                                <!--$('#top-alert').find('button').click();-->
+                                                <!--$(that).removeClass('disabled').prop('disabled',false);-->
+                                            <!--},1500);-->
+                                        <!--}-->
+                                    <!--}-->
+                                <!--</script>-->
+                            </case>
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" class="radio_pai btn" value="X">
+                        </td>
+                        <td>
+                            <select id="quan_pai3" class="quan">
+
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="from"  >
+                        </td>
+                        <td>
+                            <input type="text" name="end" >
+                        </td>
+
+                        <td>
+                            <case>
+                                <div class="controls">
+                                    <input type="file" class="upload_picture{$field.name}">
+                                    <input type="hidden" name="{$field.name}" id="cover_id_{$field.name}" value="{$data[$field['name']]}"/>
+                                    <div class="upload-img-box">
+                                        <notempty name="data[$field['name']]">
+                                            <div class="upload-pre-item"><img src="__ROOT__{$data[$field['name']]|get_cover='path'}"/></div>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <!--<script type="text/javascript">-->
+                                    <!--//上传图片-->
+                                    <!--/* 初始化上传插件 */-->
+                                    <!--$("#upload_picture_num5{$field.name}").uploadify({-->
+                                        <!--"height"          : "50",-->
+                                        <!--"swf"             : "__STATIC__/uploadify/uploadify.swf",-->
+                                        <!--"fileObjName"     : "download",-->
+                                        <!--"buttonText"      : "上传图片",-->
+                                        <!--"uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",-->
+                                        <!--"width"           : 70,-->
+                                        <!--'removeTimeout'	  : 1,-->
+                                        <!--'fileTypeExts'	  : '*.jpg; *.png; *.gif;',-->
+                                        <!--"onUploadSuccess" : uploadPicture{$field.name}-->
+                                    <!--});-->
+                                    <!--function uploadPicture{$field.name}(file, data){-->
+                                        <!--var data = $.parseJSON(data);-->
+                                        <!--var src = '';-->
+                                        <!--if(data.status){-->
+                                            <!--$("#cover_id_{$field.name}").val(data.id);-->
+                                            <!--src = data.url || '__ROOT__' + data.path;-->
+                                            <!--$("#cover_id_{$field.name}").parent().find('.upload-img-box').html(-->
+                                                    <!--'<div class="upload-pre-item"><img src="' + src + '"/></div>'-->
+                                            <!--);-->
+                                        <!--} else {-->
+                                            <!--updateAlert(data.info);-->
+                                            <!--setTimeout(function(){-->
+                                                <!--$('#top-alert').find('button').click();-->
+                                                <!--$(that).removeClass('disabled').prop('disabled',false);-->
+                                            <!--},1500);-->
+                                        <!--}-->
+                                    <!--}-->
+                                <!--</script>-->
+                            </case>
+
+                        </td>
+
+                    </tr>
+
+
+
+
+                </table>
+                <div style="margin-top: 30px;margin-left: 50px">
+                    <button id="button_add_row1" class="btn">增加</button>
+                    <!--<input ="button" class="regular-radio">-->
+                    <!--<label id="button_add_row1">增 加</label>-->
+
+                    <!--<input type="button" class="regular-radio">-->
+                    <!--<label id="button_delete_row1">删 除</label>-->
+                </div>
+                <script>
+
+
+                    $("#paiquan_pai").hide();
+
+                </script>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+            <div id="paiquan_chou" >
+                <table style="margin-top: 50px;margin-left: 30px" id="table_chou" >
+                    <tr>
+                        <td></td>
+                        <td>奖品名称</td>
+                        <td>奖品份数</td>
+                        <td>总人数</td>
+                        <td>概率</td>
+                        <td>奖品图片</td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" class="radio_pai btn" value="X">
+                        </td>
+                        <td>
+                            <select id="quan_chou1" class="quan">
+
+                            </select>
+
+                        </td>
+                        <td>
+                            <input type="text" name="award_num" >
+                        </td>
+                        <td>
+                            <input type="text" name="people_num" >
+                        </td>
+                        <td>
+                            <a></a>
+
+                        </td>
+                        <td>
+                            <case>
+                                <div class="controls">
+                                    <input type="file" class="upload_picture{$field.name}">
+                                    <input type="hidden" name="{$field.name}" id="cover_id_{$field.name}" value="{$data[$field['name']]}"/>
+                                    <div class="upload-img-box">
+                                        <notempty name="data[$field['name']]">
+                                            <div class="upload-pre-item"><img src="__ROOT__{$data[$field['name']]|get_cover='path'}"/></div>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <!--<script type="text/javascript">-->
+                                    <!--//上传图片-->
+                                    <!--/* 初始化上传插件 */-->
+                                    <!--$("#upload_picture_{$field.name}").uploadify({-->
+                                        <!--"height"          : "50",-->
+                                        <!--"swf"             : "__STATIC__/uploadify/uploadify.swf",-->
+                                        <!--"fileObjName"     : "download",-->
+                                        <!--"buttonText"      : "上传图片",-->
+                                        <!--"uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",-->
+                                        <!--"width"           : 70,-->
+                                        <!--'removeTimeout'	  : 1,-->
+                                        <!--'fileTypeExts'	  : '*.jpg; *.png; *.gif;',-->
+                                        <!--"onUploadSuccess" : uploadPicture{$field.name}-->
+                                    <!--});-->
+                                    <!--function uploadPicture{$field.name}(file, data){-->
+                                        <!--var data = $.parseJSON(data);-->
+                                        <!--var src = '';-->
+                                        <!--if(data.status){-->
+                                            <!--$("#cover_id_{$field.name}").val(data.id);-->
+                                            <!--src = data.url || '__ROOT__' + data.path;-->
+                                            <!--$("#cover_id_{$field.name}").parent().find('.upload-img-box').html(-->
+                                                    <!--'<div class="upload-pre-item"><img src="' + src + '"/></div>'-->
+                                            <!--);-->
+                                        <!--} else {-->
+                                            <!--updateAlert(data.info);-->
+                                            <!--setTimeout(function(){-->
+                                                <!--$('#top-alert').find('button').click();-->
+                                                <!--$(that).removeClass('disabled').prop('disabled',false);-->
+                                            <!--},1500);-->
+                                        <!--}-->
+                                    <!--}-->
+                                <!--</script>-->
+                            </case>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" class="radio_pai btn" value="X">
+                        </td>
+                        <td>
+                            <select id="quan_chou2" class="quan">
+
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="award_num" >
+                        </td>
+                        <td>
+                            <input type="text" name="people_num" >
+                        </td>
+                        <td>
+                            <a></a>
+                        </td>
+                        <td>
+                            <case>
+                                <div class="controls">
+                                    <input type="file" class="upload_picture{$field.name}">
+                                    <input type="hidden" name="{$field.name}" id="cover_id_{$field.name}" value="{$data[$field['name']]}"/>
+                                    <div class="upload-img-box">
+                                        <notempty name="data[$field['name']]">
+                                            <div class="upload-pre-item"><img src="__ROOT__{$data[$field['name']]|get_cover='path'}"/></div>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <!--<script type="text/javascript">-->
+                                    <!--//上传图片-->
+                                    <!--/* 初始化上传插件 */-->
+                                    <!--$("#upload_picture_num2{$field.name}").uploadify({-->
+                                        <!--"height"          : "50",-->
+                                        <!--"swf"             : "__STATIC__/uploadify/uploadify.swf",-->
+                                        <!--"fileObjName"     : "download",-->
+                                        <!--"buttonText"      : "上传图片",-->
+                                        <!--"uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",-->
+                                        <!--"width"           : 70,-->
+                                        <!--'removeTimeout'	  : 1,-->
+                                        <!--'fileTypeExts'	  : '*.jpg; *.png; *.gif;',-->
+                                        <!--"onUploadSuccess" : uploadPicture{$field.name}-->
+                                    <!--});-->
+                                    <!--function uploadPicture{$field.name}(file, data){-->
+                                        <!--var data = $.parseJSON(data);-->
+                                        <!--var src = '';-->
+                                        <!--if(data.status){-->
+                                            <!--$("#cover_id_{$field.name}").val(data.id);-->
+                                            <!--src = data.url || '__ROOT__' + data.path;-->
+                                            <!--$("#cover_id_{$field.name}").parent().find('.upload-img-box').html(-->
+                                                    <!--'<div class="upload-pre-item"><img src="' + src + '"/></div>'-->
+                                            <!--);-->
+                                        <!--} else {-->
+                                            <!--updateAlert(data.info);-->
+                                            <!--setTimeout(function(){-->
+                                                <!--$('#top-alert').find('button').click();-->
+                                                <!--$(that).removeClass('disabled').prop('disabled',false);-->
+                                            <!--},1500);-->
+                                        <!--}-->
+                                    <!--}-->
+                                <!--</script>-->
+                            </case>
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" class="radio_pai btn" value="X">
+                        </td>
+                        <td>
+                            <select id="quan_chou3" class="quan">
+
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="award_num" >
+                        </td>
+                        <td>
+                            <input type="text" name="people_num" >
+                        </td>
+                        <td>
+                            <a></a>
+                        </td>
+                        <td>
+                            <case>
+                                <div class="controls">
+                                    <input type="file" class="upload_picture{$field.name}">
+                                    <input type="hidden" name="{$field.name}" id="cover_id_{$field.name}" value="{$data[$field['name']]}"/>
+                                    <div class="upload-img-box">
+                                        <notempty name="data[$field['name']]">
+                                            <div class="upload-pre-item"><img src="__ROOT__{$data[$field['name']]|get_cover='path'}"/></div>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <!--<script type="text/javascript">-->
+                                    <!--//上传图片-->
+                                    <!--/* 初始化上传插件 */-->
+                                    <!--$("#upload_picture_num1{$field.name}").uploadify({-->
+                                        <!--"height"          : "50",-->
+                                        <!--"swf"             : "__STATIC__/uploadify/uploadify.swf",-->
+                                        <!--"fileObjName"     : "download",-->
+                                        <!--"buttonText"      : "上传图片",-->
+                                        <!--"uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",-->
+                                        <!--"width"           : 70,-->
+                                        <!--'removeTimeout'	  : 1,-->
+                                        <!--'fileTypeExts'	  : '*.jpg; *.png; *.gif;',-->
+                                        <!--"onUploadSuccess" : uploadPicture{$field.name}-->
+                                    <!--});-->
+                                    <!--function uploadPicture{$field.name}(file, data){-->
+                                        <!--var data = $.parseJSON(data);-->
+                                        <!--var src = '';-->
+                                        <!--if(data.status){-->
+                                            <!--$("#cover_id_{$field.name}").val(data.id);-->
+                                            <!--src = data.url || '__ROOT__' + data.path;-->
+                                            <!--$("#cover_id_{$field.name}").parent().find('.upload-img-box').html(-->
+                                                    <!--'<div class="upload-pre-item"><img src="' + src + '"/></div>'-->
+                                            <!--);-->
+                                        <!--} else {-->
+                                            <!--updateAlert(data.info);-->
+                                            <!--setTimeout(function(){-->
+                                                <!--$('#top-alert').find('button').click();-->
+                                                <!--$(that).removeClass('disabled').prop('disabled',false);-->
+                                            <!--},1500);-->
+                                        <!--}-->
+                                    <!--}-->
+                                <!--</script>-->
+                            </case>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+                <div style="margin-top: 30px;margin-left: 50px">
+                    <button id="button_add_row2" class="btn">增加</button>
+                    <!--<button id="button_delete_row2" class="btn submit-btn">删除</button>-->
+                    <!--<input ="button" class="btn submit-btn">-->
+                    <!--<label id="button_add_row2">增 加</label>-->
+
+                    <!--<input type="button" class="btn submit-btn">-->
+                    <!--<label id="button_delete_row2">删 除</label>-->
+                </div>
+
+
+            </div>
+
+
+
+
+            <div style="margin-top: 50px;margin-left: 30px">
+
+                <input type="submit" class="btn submit-btn" value="确认发布"  >
+
+                <input type="button" class="btn save-btn" value="保存规则" >
+
+                <input type="button" class="btn blue_btn" value="取消">
+
+            </div>
+</form>
+
+
+
+
+
+
+
+        </section>
+    </div>
+</block>
+<block name="script">
+  <script>
+
+
+      var quan_serial;//卡券唯一编号
+      var quan_num;//卡券库存数
+      var quan_title;
+      //优惠券的获取
+      window.onload=function(){
+          $(".quan").append("<option>你妹涅米</option>");
+          $(".quan").append("<option>你妹涅米</option>");
+          $(".quan").append("<option>你妹涅米</option>");
+
+
+
+          $.getJSON(
+                  "http://m.test.saofu.cn/saofu-card/yunnex-kq/getactivitykq/10549840601068216320",
+                  {"shopSerial":10549840601068216320},
+
+                  function(data){
+                      alert(12);
+                      //数据处理
+                      $.each(data.comments(),function(i,item){
+                          $(".quan").append("<option>"+item.title+"</option>");
+                          quan_serial[i]=item.serial;
+                          quan_title[i]=item.title;
+                          quan_num=item.skuQuantity;
+
+
+
+
+                      });
+
+
+
+                  }
+          );
+
+
+
+
+      }
+
+
+      //照片上传
+
+
+      $("#upload_picture{$field.name}").uploadify({
+          "height"          : "50",
+          "swf"             : "__STATIC__/uploadify/uploadify.swf",
+          "fileObjName"     : "download",
+          "buttonText"      : "上传图片",
+          "uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",
+          "width"           : 70,
+          'removeTimeout'	  : 1,
+          'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+          "onUploadSuccess" : uploadPicture{$field.name}
+      });
+      function uploadPicture{$field.name}(file, data){
+          var data = $.parseJSON(data);
+          var src = '';
+          if(data.status){
+              $("#cover_id_{$field.name}").val(data.id);
+              src = data.url || '__ROOT__' + data.path;
+              $("#cover_id_{$field.name}").parent().find('.upload-img-box').html(
+                      '<div class="upload-pre-item"><img src="' + src + '"/></div>'
+              );
+          } else {
+              updateAlert(data.info);
+              setTimeout(function(){
+                  $('#top-alert').find('button').click();
+                  $(that).removeClass('disabled').prop('disabled',false);
+              },1500);
+          }
+      }
+
+
+//
+      $("#rule_button_all").click(function(){
+          $("#paiquan_pai").hide();
+          $("#paiquan_chou").hide();
+          $("#paiquan_all").show();
+
+
+
+
+
+      });
+      $("#rule_button_pai").click(function(){
+          $("#paiquan_all").hide();
+          $("#paiquan_chou").hide();
+          $("#paiquan_pai").show();
+
+
+      });
+      $("#rule_button_chou").click(function(){
+          $("#paiquan_pai").hide();
+          $("#paiquan_all").hide();
+          $("#paiquan_chou").show();
+
+
+      });
+
+
+      $("#button_add_row1").click(function(){
+              var myTable=document.getElementById("table_pai");
+
+              var newTr=myTable.insertRow(myTable.rows.length);
+              var newTd1=newTr.insertCell(0);
+              newTd1.innerHTML="<input type='button'class='radio_pai' onclick='deleteRow()'>";
+              var newTd2=newTr.insertCell(1);
+              newTd2.innerHTML="<input type='text' name='award_pai'>";
+              var newTd3=newTr.insertCell(2);
+              newTd3.innerHTML="<input type='text' name='from'>";
+              var newTd4=newTr.insertCell(3);
+              newTd4.innerHTML="<input type='text' name='end'>";
+              var newTd5=newTr.insertCell(4);
+
+              newTd5.innerHTML="<input type='file'>"
+
+
+
+
+
+
+
+          });
+
+
+
+
+      $("#button_add_row2").click(function(){
+          var myTable=document.getElementById("table_chou");
+
+          var newTr=myTable.insertRow(myTable.rows.length);
+          var newTd1=newTr.insertCell(0);
+          newTd1.innerHTML="<input type='button'class='radio_chou' onclick='deleteRow()'>";
+          var newTd2=newTr.insertCell(1);
+          newTd2.innerHTML="<textarea></textarea>";
+          var newTd3=newTr.insertCell(2);
+          newTd3.innerHTML="<textarea></textarea>";
+          var newTd4=newTr.insertCell(3);
+          newTd4.innerHTML="<textarea></textarea>";
+          var newTd5=newTr.insertCell(4);
+          newTd5.innerHTML="";
+          var newTd6=newTr.insertCell(5);
+
+          newTd6.innerHTML="<input type='file'>"
+
+
+
+
+      });
+
+
+
+//删除表格
+
+
+$(".radio_pai").click(function(){
+    var myTable=document.getElementById("table_pai");
+    if(true){
+        $(this).closest('tr').remove();
+    }
+
+});
+
+
+//标题的获取
+$('input[name="title"]').blur(function(){
+    var title=$(this).val();
+
+
+    $.get('',{'title':title},function(award_num){
+//        alert(award_num);
+    });
+});
+
+    //派券规则的获取
+    $('input[name="rule_radio"]').blur(function(){
+        var type=$(this).val();
+        var row=$(this).closest("tr").index();
+        var cell=$(this).closest("td").index();
+
+        $.get('',{'rule_radio':type},function(award_num){
+//        alert(award_num);
+        });
+    });
+//排名派券的数据获取
+$('input[name="award_pai"]').blur(function(){
+    var award_pai=$(this).val();
+    var row=$(this).closest("tr").index();
+    var cell=$(this).closest("td").index();
+
+    $.get('',{'award_pai':award_pai,'row':row},function(award_num){
+//        alert(award_num);
+    });
+
+
+});
+
+$('input[name="from"]').blur(function(){
+    var from=$(this).val();
+    var row=$(this).closest("tr").index();
+    var cell=$(this).closest("td").index();
+
+    $.get('',{'from':from,'row':row},function(award_num){
+//        alert(award_num);
+    });
+
+
+});
+
+$('input[name="end"]').blur(function(){
+    var end=$(this).val();
+    var row=$(this).closest("tr").index();
+    var cell=$(this).closest("td").index();
+
+    $.get('',{'end':end,'row':row},function(award_num){
+//        alert(award_num);
+    });
+
+
+});
+
+
+//抽奖派券的数据获取
+$('input[name="award_chou"]').blur(function(){
+    var award_chou=$(this).val();
+    var row=$(this).closest("tr").index();
+    var cell=$(this).closest("td").index();
+
+    $.get('',{'award_chou':award_chou,'row':row},function(award_num){
+//        alert(award_num);
+    });
+
+
+});
+var award_num
+$('input[name="award_num"]').blur(function(){
+    award_num=$(this).val();
+    var row=$(this).closest("tr").index();
+    var cell=$(this).closest("td").index();
+
+    $.get('',{'award_num':award_num,'row':row,'cell':cell},function(award_num){
+//        alert(award_num);
+    });
+
+
+});
+
+//概率的自动计算
+$('input[name="people_num"]').blur(function(){
+    var people_num=$(this).val();
+    var row=$(this).closest("tr").index();
+    var cell=$(this).closest("td").index();
+
+//    $("#table_chou").rows[row].cells[cell].innerText("miao");
+    var table= document.getElementById("table_chou");
+    if(people_num!=null&&award_num!=null&&people_num!=0&&award_num!=0){
+        table.rows[row].cells[cell+1].innerText=(award_num/people_num*100).toFixed(4)+"%";
+
+    }else{
+        table.rows[row].cells[cell+1].innerText="请输入..(●'◡'●)";
+    }
+
+    $.get('',{'people_num':people_num,'row':row},function(award_num){
+//     alert(award_num);
+    });
+
+
+});
+$('input[name="ef_num"]').blur(function(){
+    var people_num=$(this).val();
+
+    var row=$(this).closest("tr").index();
+
+    var cell=$(this).closest("td").index();
+    var table= document.getElementById("table_chou");
+    table.rows[row].cells[cell+1].innerHTML("<a>people_num*award_num</a>");
+    $.get('',{'people_num':people_num,'row':row},function(award_num){
+        alert(award_num);
+    });
+
+
+});
+function myGaiLv(thisObj,id){
+//    alert(id+"你妹");
+//    var tr=thisObj.parent('tr').child('td');
+//    alert(tr.eq(2));
+}
+
+function OnInput(event,elementId){
+//    var myTable=document.getElementById("table_chou");
+//    var value=event.target.value;
+//    var tr=elementId.parent('tr').child('td');
+//    alert(tr.eq(2).value());
+
+
+
+
+}
+function OnPropChanged (event) {
+
+    var value=event.srcElement.value
+
+}
+
+
+
+
+//
+//function deleteRow(){
+//    var myTable=document.getElementById("table_pai");
+//
+//
+//
+//
+//    $(this).closest('tr').remove();
+//
+//
+//
+//
+//
+//
+//
+//}
+
+      $("#button_delete_row2").click(function(){
+
+
+
+      });
+
+
+//上传图片
+
+$(".upload_picture_num1{$field.name}").uploadify({
+    "height"          : "50",
+    "swf"             : "__STATIC__/uploadify/uploadify.swf",
+    "fileObjName"     : "download",
+    "buttonText"      : "上传图片",
+    "uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",
+    "width"           : 70,
+    'removeTimeout'	  : 1,
+    'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+    "onUploadSuccess" : uploadPicture{$field.name}
+});
+function uploadPicture{$field.name}(file, data){
+    var data = $.parseJSON(data);
+    var src = '';
+    if(data.status){
+        $("#cover_id_{$field.name}").val(data.id);
+        src = data.url || '__ROOT__' + data.path;
+        $("#cover_id_{$field.name}").parent().find('.upload-img-box').html(
+                '<div class="upload-pre-item"><img src="' + src + '"/></div>'
+        );
+    } else {
+        updateAlert(data.info);
+        setTimeout(function(){
+            $('#top-alert').find('button').click();
+            $(that).removeClass('disabled').prop('disabled',false);
+        },1500);
+    }
+}
+
+
+
+
+  </script>
+
+</block>

@@ -1,0 +1,40 @@
+[ 2015-05-19T11:50:20+08:00 ] ::1 /weiphp/index.php?s=/Admin/Attribute/update.html
+ERR: 1060:Duplicate column name 'id'
+ [ SQL璇彞 ] : 				CREATE TABLE IF NOT EXISTS `wp_forms_rule_pai` (
+				`id`  int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '涓婚敭' ,
+				`id`  int(10) NOT NULL  DEFAULT 0 COMMENT '瑙勫垯ID' ,
+				PRIMARY KEY (`id`)
+				)
+				ENGINE=MyISAM
+				DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+				CHECKSUM=0
+				ROW_FORMAT=DYNAMIC
+				DELAY_KEY_WRITE=0
+				;
+
+[ 2015-05-19T13:18:49+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rule/forms_id/14.html
+ERR: 1064:You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-10,10' at line 1
+ [ SQL璇彞 ] : SELECT `id`,`title`,`type` FROM `wp_forms_rule` ORDER BY id desc LIMIT -10,10  
+
+[ 2015-05-19T13:21:54+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rule/forms_id/14.html
+ERR: 1064:You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-10,10' at line 1
+ [ SQL璇彞 ] : SELECT `id`,`title`,`type` FROM `wp_forms_rule` ORDER BY id desc LIMIT -10,10  
+
+[ 2015-05-19T13:22:51+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rule/forms_id/14.html
+ERR: 1064:You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-10,10' at line 1
+ [ SQL璇彞 ] : SELECT `id`,`title`,`type` FROM `wp_forms_rule` ORDER BY id desc LIMIT -10,10  
+
+[ 2015-05-19T13:22:54+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rule/forms_id/14.html
+ERR: 1064:You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-10,10' at line 1
+ [ SQL璇彞 ] : SELECT `id`,`title`,`type` FROM `wp_forms_rule` ORDER BY id desc LIMIT -10,10  
+
+[ 2015-05-19T13:46:10+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rule/forms_id/14.html
+ERR: 1146:Table 'myapp.wp_form_rule' doesn't exist
+ [ SQL璇彞 ] : SHOW COLUMNS FROM `wp_form_rule`
+ERR: 1146:Table 'myapp.wp_form_rule' doesn't exist
+ [ SQL璇彞 ] : SELECT `title` FROM `wp_form_rule` 
+
+[ 2015-05-19T14:24:24+08:00 ] ::1 /weiphp/
+ERR: 由于目标计算机积极拒绝，无法连接。
+
+
