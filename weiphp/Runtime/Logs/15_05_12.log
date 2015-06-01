@@ -1,0 +1,8 @@
+[ 2015-05-12T22:23:42+08:00 ] ::1 /weiphp/index.php?s=/addon/WeiBiaoDan/WeiBiaoDan/lists.html
+ERR: 1064:You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+ [ SQL语句 ] : SELECT `name` FROM `wp_attribute` WHERE ( model_id= ) 
+ERR: 1146:Table 'myapp.wp_' doesn't exist
+ [ SQL语句 ] : SELECT * FROM `wp_` WHERE ( `token` = 'gh_a58387e4aa4d' ) ORDER BY id desc LIMIT 0,20  
+ERR: 1146:Table 'myapp.wp_' doesn't exist
+ [ SQL语句 ] : SELECT COUNT(*) AS tp_count FROM `wp_` WHERE ( `token` = 'gh_a58387e4aa4d' ) LIMIT 1  
+

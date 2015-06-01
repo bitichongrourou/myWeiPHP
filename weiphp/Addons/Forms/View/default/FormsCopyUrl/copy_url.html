@@ -1,0 +1,29 @@
+<include file="Public/mobile_head"/>
+<extend name="Base/common" />
+<block name="body">
+    <include file="Addons/_nav" />
+    <div style="padding-top: 100px;padding-left: 60px">
+        <h1 style="color: #00CC00">请复制此链接：</h1>
+        <h2>{$url}</h2>
+
+        <button class="btn submit-btn" style="margin-top: 50px" id="button" value="{$url}">复 制</button>
+
+    </div>
+
+</block>
+<block name="script">
+    <script>
+        $("#button").click(function(){
+            var url=$(this).getValue();
+            if(navigator.userAgent.toLowerCase().indexOf('ie') > -1) {
+                clipboardData.setData('url',url);
+                alert ("已复制到剪切板！");
+            } else {
+                alert("非IE内核浏览器，请手动复制");
+            }
+
+        });
+
+    </script>
+
+</block>

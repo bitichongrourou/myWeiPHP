@@ -1,0 +1,50 @@
+[ 2015-05-17T10:33:26+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rules.html
+ERR: 模板不存在:./Application/Home/View/default/Addons/rules.html
+
+[ 2015-05-17T10:36:29+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rules.html
+ERR: 模板不存在:./Application/Home/View/default/Addons/rules.html
+
+[ 2015-05-17T10:41:50+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rules/forms_id/14.html
+ERR: 模板不存在:./Application/Home/View/default/Addons/rules.html
+
+[ 2015-05-17T10:43:17+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rules/forms_id/14.html
+ERR: 模板不存在:./Application/Home/View/default/Addons/rules.html
+
+[ 2015-05-17T11:04:57+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/lists/forms_id/14.html
+ERR: 1054:Unknown column 'sort' in 'order clause'
+ [ SQL语句 ] : SELECT `id`,`zhongjiang_id`,`open_id`,`name`,`number`,`ctime`,`forms_id` FROM `wp_forms_zhongjiang` ORDER BY sort asc, id asc LIMIT 0,10  
+
+[ 2015-05-17T11:05:02+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/lists/forms_id/14.html
+ERR: 1054:Unknown column 'sort' in 'order clause'
+ [ SQL语句 ] : SELECT `id`,`zhongjiang_id`,`open_id`,`name`,`number`,`ctime`,`forms_id` FROM `wp_forms_zhongjiang` ORDER BY sort asc, id asc LIMIT 0,10  
+
+[ 2015-05-17T11:05:15+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/lists/forms_id/14.html
+ERR: 1054:Unknown column 'sort' in 'order clause'
+ [ SQL语句 ] : SELECT `id`,`zhongjiang_id`,`open_id`,`name`,`number`,`ctime`,`forms_id` FROM `wp_forms_zhongjiang` ORDER BY sort asc, id asc LIMIT 0,10  
+
+[ 2015-05-17T11:56:22+08:00 ] ::1 /weiphp/index.php?s=/Admin/Attribute/update.html
+ERR: 1067:Invalid default value for 'state'
+ [ SQL语句 ] : 			ALTER TABLE `wp_forms_zhongjiang`
+CHANGE COLUMN `state` `state`  int(10) NOT NULL  DEFAULT '成功' COMMENT '派奖状态' ;
+
+[ 2015-05-17T12:12:43+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/edit/forms_id/14.html
+ERR: Think\Controller:_getTemplateByDir方法不存在！
+
+[ 2015-05-17T12:15:29+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rule/forms_id/14.html
+ERR: Think\Controller:_getTemplateByDir方法不存在！
+
+[ 2015-05-17T12:15:45+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rule/forms_id/14.html
+ERR: Think\Controller:_getTemplateByDir方法不存在！
+
+[ 2015-05-17T12:19:44+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rule/forms_id/14.html
+ERR: Think\Controller:_getTemplateByDir方法不存在！
+
+[ 2015-05-17T12:19:47+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rule/forms_id/14.html
+ERR: Think\Controller:_getTemplateByDir方法不存在！
+
+[ 2015-05-17T12:25:02+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rule/forms_id/14.html
+ERR: Think\Controller:_getTemplateByDir方法不存在！
+
+[ 2015-05-17T12:25:18+08:00 ] ::1 /weiphp/index.php?s=/addon/Forms/ZhongJiang/rule/forms_id/14.html
+ERR: Think\Controller:_getTemplateByDir方法不存在！
+
